@@ -13,12 +13,15 @@
     data() {
       var API_PATH = 'https://t2tc.maciekmm.net/';
 
+      var request = new XMLHttpRequest();
+      request.open("GET", API_PATH, false);
+      request.send(null)
+      var markers = JSON.parse(request.responseText);
+      console.log(markers);
+
       return {
         target: 'Toruń',
-        points: [
-          {lat: 53.01455, lng: 18.569830799999977},
-          {lat: 53.0112008, lng: 18.608547199999975}
-        ]
+        markers: markers
       }
     },
     mounted: function() {
@@ -30,12 +33,14 @@
         this.map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 53.0200, lng: 18.6090},
           scrollwheel: false,
-          zoom: 10
+          zoom: 13
         })
       },
       populateMarkers: function() {
-        for (var i = 0; i < this.points.length; i++) {
-          var latLng = new google.maps.LatLng(this.points[i].lat, this.points[i].lng);
+        for (var i = 0; i < this.markers.length; i++) {
+          var data = this.markers[i];
+          console.log(data)
+          var latLng = new google.maps.LatLng(data.latitude, data.longitude);
           var marker = new google.maps.Marker({
             position: latLng,
             map: this.map
