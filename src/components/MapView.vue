@@ -13,15 +13,22 @@
     data() {
       var API_PATH = 'https://t2tc.maciekmm.net/';
 
+      // objects
       var request = new XMLHttpRequest();
       request.open("GET", API_PATH, false);
-      request.send(null)
+      request.send(null);
       var markers = JSON.parse(request.responseText);
-      console.log(markers);
+
+      // pictograms
+      request.open("GET", API_PATH + 'pictograms', false);
+      request.send(null);
+      var pictograms = JSON.parse(request.responseText);
+      console.log(pictograms)
 
       return {
         target: 'Toruń',
-        markers: markers
+        markers: markers,
+        pictograms: pictograms
       }
     },
     mounted: function() {
@@ -37,14 +44,41 @@
         })
       },
       populateMarkers: function() {
+        var infowindow;
+        var pict = this.pictograms;
         for (var i = 0; i < this.markers.length; i++) {
           var data = this.markers[i];
-          console.log(data)
           var latLng = new google.maps.LatLng(data.latitude, data.longitude);
+
           var marker = new google.maps.Marker({
             position: latLng,
-            map: this.map
+            map: this.map,
+            clickable: true,
+            title: data.name, 
+            data: data
           });
+
+          var b = this.map
+          google.maps.event.addListener(marker, 'click', function() {
+            var info = this
+            b.panTo(this.position);
+            if (infowindow)
+              infowindow.close();
+            
+            var contentString = "<strong>" + info.title + "</strong><br/><table><tr><td class=''>Wejście do budynku</td><td class=''>Transport</td></tr>";
+            console.log(info.data)
+            contentString = "</table>";
+            for(var i = 0; i < Object.keys(info.data.pictograms).length; i++) { // never do dis
+              //if(pict[i] != undefined)
+              console.log(info.data.pictograms[i])
+              contentString += "<i>" + pict[info.data.pictograms[i]] + "</i><br/>";
+            }
+
+            infowindow = new google.maps.InfoWindow({
+              content: contentString
+            });
+            infowindow.open(b, this);
+          })
         }
       },
       changeTarget: function() {
