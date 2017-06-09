@@ -15,6 +15,7 @@
 </template>
 <script>
 
+
 import PictogramFilter from '../filters/PictogramFilter.vue'
 import MinorFilters from '../filters/MinorFilters.vue'
 
@@ -30,9 +31,14 @@ export default {
     request.open("GET", API_PATH, false);
     request.send(null)
     var markers = JSON.parse(request.responseText);
-
+    // pictograms
+    request.open("GET", API_PATH + 'pictograms', false);
+    request.send(null);
+    var pictograms = JSON.parse(request.responseText);
+    console.log(pictograms)
     return {
       target: 'Toruń',
+      pictograms: pictograms,
       markers: markers
     }
   },
@@ -41,16 +47,16 @@ export default {
     this.populateMarkers();
   },
   methods: {
-    updateFilters: function(filter) {
-      for(let marker of this.markers) {
+    updateFilters: function (filter) {
+      for (let marker of this.markers) {
         let visible = true
-        for(let filter of this.$children) {
-          if(!filter.matches(marker)) {
+        for (let filter of this.$children) {
+          if (!filter.matches(marker)) {
             visible = false
             break;
           }
         }
-        if(visible) {
+        if (visible) {
           marker.marker.setMap(this.map);
         } else {
           marker.marker.setMap(null);
@@ -65,14 +71,42 @@ export default {
       })
     },
     populateMarkers: function () {
+      var infowindow;
+      var pict = this.pictograms;
       for (var i = 0; i < this.markers.length; i++) {
         var data = this.markers[i];
         var latLng = new google.maps.LatLng(data.latitude, data.longitude);
+
         var marker = new google.maps.Marker({
           position: latLng,
           map: this.map,
+          clickable: true,
+          title: data.name,
+          data: data
         });
-        this.markers[i].marker = marker
+        this.markers[i].marker = marker;
+
+        var b = this.map
+        google.maps.event.addListener(marker, 'click', function () {
+          var info = this
+          b.panTo(this.position);
+          if (infowindow)
+            infowindow.close();
+
+          var contentString = "<strong>" + info.title + "</strong><br/><table><tr><td class=''>Wejście do budynku</td><td class=''>Transport</td></tr>";
+          console.log(info.data)
+          contentString = "</table>";
+          for (var i = 0; i < Object.keys(info.data.pictograms).length; i++) { // never do dis
+            //if(pict[i] != undefined)
+            console.log(info.data.pictograms[i])
+            contentString += "<i>" + pict[info.data.pictograms[i]] + "</i><br/>";
+          }
+
+          infowindow = new google.maps.InfoWindow({
+            content: contentString
+          });
+          infowindow.open(b, this);
+        })
       }
     },
     changeTarget: function () {
@@ -86,7 +120,7 @@ export default {
         }
       })
     }
-  }
+  },
 }
 </script>
 <style lang="scss" scoped>
