@@ -7,11 +7,15 @@
   export default {
     data() {
       return {
-
+        points: [
+          {lat: 53.01455, lng: 18.569830799999977},
+          {lat: 53.0112008, lng: 18.608547199999975}
+        ]
       }
     },
     mounted: function() {
       this.initMap();
+      this.populateMarkers();
     },
     methods: {
       initMap: function() {
@@ -20,6 +24,15 @@
         scrollwheel: false,
         zoom: 10
         })
+      },
+      populateMarkers: function() {
+        for (var i = 0; i < this.points.length; i++) {
+          var latLng = new google.maps.LatLng(this.points[i].lat, this.points[i].lng);
+          var marker = new google.maps.Marker({
+            position: latLng,
+            map: this.map
+          });
+        }
       }
     }
   }
