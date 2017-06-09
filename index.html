@@ -26,7 +26,7 @@
         for (var file of chunk.files) {
           if (file.match(/\.(js|css)$/)) { %>
     <link rel="<%= chunk.initial?'preload':'prefetch' %>" href="<%= htmlWebpackPlugin.files.publicPath + file %>" as="<%= file.match(/\.css$/)?'style':'script' %>"><% }}} %>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCr9x-t957jlb8MdQrwkS0c-CkkOX6zjgc"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCr9x-t957jlb8MdQrwkS0c-CkkOX6zjgc"></script>
   </head>
   <body>
     <div id="app">This is your fallback content in case JavaScript fails to load.</div>

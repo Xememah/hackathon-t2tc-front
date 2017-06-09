@@ -15,7 +15,7 @@
 export default {
   data() {
     return {
-      cities: ['Gdańsk', 'Toruń']
+      cities: ['Gdańsk', 'Toruń', 'Warszawa', 'Wrocław']
     }
   },
   methods: {
