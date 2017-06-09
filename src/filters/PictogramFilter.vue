@@ -26,8 +26,11 @@ export default {
             this.update(this);
         },
         matches: function (obj) {
-            for (let key in this.selected) {
-                if (obj.pictograms.indexOf(Number(this.selected[key])) == -1) {
+            for (let val of this.selected) {
+                if (val == 2 && obj.pictograms.indexOf(1) !== -1) {
+                    return true
+                }
+                if (obj.pictograms.indexOf(Number(val)) == -1) {
                     return false;
                 }
             }
