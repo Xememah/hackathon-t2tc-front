@@ -42,7 +42,7 @@ export default {
       target: 'Toruń',
       pictograms: pictograms,
       markers: markers,
-      sidebar: false
+      sidebar: true
     }
   },
   mounted: function () {
@@ -253,7 +253,6 @@ export default {
   max-width: 373px;
   margin-top: 6em;
   margin-left: 0.8em;
-  height: 61%;
   padding: 1em;
 }
 </style>

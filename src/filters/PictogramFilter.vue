@@ -5,11 +5,11 @@
                 <td class="tab-header" colspan="2">Udogodnienia</td>
             </tr>
             <tr class="tab">
-                <td>dla osób niewidomych 20</td>
-                <td style="text-align: right;">dla osób niedowidzących 21</td>
+                <td><label><input type="checkbox" value="20" v-model="selected" name="pictograms" v-on:change="updateParent">dla osób niewidomych</label></td>
+                <td style="text-align: right;"><label><input type="checkbox" value="21" v-model="selected" name="pictograms" v-on:change="updateParent">dla osób niedowidzących</label></td>
             </tr>
             <tr class="tab">
-                <td colspan="2">dla osób z niepełnosprawnościami intelektualnymi 18</td>
+                <td colspan="2"><label><input type="checkbox" value="18" v-model="selected" name="pictograms" v-on:change="updateParent">dla osób z niepełnosprawnościami intelektualnymi</label></td>
             </tr>
         </table>
         <table style="width: 100%;">
@@ -17,11 +17,11 @@
                 <td class="tab-header" colspan="2">Dostępne dla</td>
             </tr>
             <tr class="tab">
-                <td>osób na wózkach 1</td>
-                <td style="text-align: right;">osób z psem asystującym 23</td>
+                <td><label><input type="checkbox" value="1" v-model="selected" name="pictograms" v-on:change="updateParent">osób na wózkach</label></td>
+                <td style="text-align: right;"><label><input type="checkbox" value="23" v-model="selected" name="pictograms" v-on:change="updateParent">osób z psem asystującym</label></td>
             </tr>
             <tr class="tab">
-                <td colspan="2">osób niesłyszących i niedosłyszących 19</td>
+                <td colspan="2"><label><input type="checkbox" value="19" v-model="selected" name="pictograms" v-on:change="updateParent">osób niesłyszących i niedosłyszących</label></td>
             </tr>
         </table>
         <table style="width: 100%;">
@@ -29,11 +29,11 @@
                 <td class="tab-header" colspan="2">Wyposażenie</td>
             </tr>
             <tr class="tab">
-                <td>przystosowana winda 5</td>
-                <td style="text-align: right;">przystosowana toaleta 8</td>
+                <td><label><input type="checkbox" value="5" v-model="selected" name="pictograms" v-on:change="updateParent">przystosowana winda</label></td>
+                <td style="text-align: right;"><label><input type="checkbox" value="8" v-model="selected" name="pictograms" v-on:change="updateParent">przystosowana toaleta</label></td>
             </tr>
             <tr class="tab">
-                <td colspan="2">parking z wyznaczonymi miejscami 3</td>
+                <td colspan="2"><label><input type="checkbox" value="3" v-model="selected" name="pictograms" v-on:change="updateParent">parking z wyznaczonymi miejscami</label></td>
             </tr>
         </table>
         <table style="width: 100%;">
@@ -41,14 +41,11 @@
                 <td class="tab-header" colspan="2">Dodatkowa pomoc</td>
             </tr>
             <tr class="tab">
-                <td>obsługa windy 6</td>
-                <td style="text-align: right;">tłumacz języka migowego 26</td>
+                <td><label><input type="checkbox" value="6" v-model="selected" name="pictograms" v-on:change="updateParent">obsługa windy</label></td>
+                <td style="text-align: right;"><label><input type="checkbox" value="26" v-model="selected" name="pictograms" v-on:change="updateParent">tłumacz języka migowego</label></td>
             </tr>
             <tr class="tab">
-                <td colspan="2">parking z miejscami dla niepełnosprawnych 3</td>
-            </tr>
-            <tr class="tab">
-                <td colspan="2">dla osób poruszających się na wózkach 2</td>
+                <td colspan="2"><label><input type="checkbox" value="2" v-model="selected" name="pictograms" v-on:change="updateParent">dla osób poruszających się na wózkach</label></td>
             </tr>
         </table>
         <table style="width: 100%;">
@@ -56,17 +53,17 @@
                 <td class="tab-header" colspan="2">Inne</td>
             </tr>
             <tr class="tab">
-                <td>parking 4</td>
-                <td style="text-align: right;">ogólnodostępna toaleta 24</td>
+                <td><label><input type="checkbox" value="4" v-model="selected" name="pictograms" v-on:change="updateParent">parking</label></td>
+                <td style="text-align: right;"><label><input type="checkbox" value="24" v-model="selected" name="pictograms" v-on:change="updateParent">ogólnodostępna toaleta</label></td>
             </tr>
             <tr class="tab">
-                <td colspan="2">pomieszczenie dla opiekuna z dzieckiem 22</td>
+               <td colspan="2"><label><input type="checkbox" value="22" v-model="selected" name="pictograms" v-on:change="updateParent"> pomieszczenie dla opiekuna z dzieckiem</label></td>
             </tr>
         </table>
     </div>
     <!--<tr v-for="(name, id) in pictograms">
                 <td class="left-tab"><label :for="id">{{ name }}</label></td>
-                <td class="right-tab"><input type="checkbox" :id="id" v-model="selected" :value="id" v-on:change="updateParent" checked></td>
+                <td class="right-tab"><label><input type="checkbox" :id="id" v-model="selected" :value="id" v-on:change="updateParent" checked></td>
             </tr>-->
 </template>
 <script>
@@ -111,5 +108,8 @@ export default {
 .tab {
     font-weight: 300;
     text-align: left;
+}
+label {
+    cursor: pointer;
 }
 </style>
