@@ -2,14 +2,16 @@
   <div class="background">
     <div class="search">
       <form v-on:submit.prevent>
-        <input type="text" v-model="target" v-on:keyup.enter="changeTarget()" placeholder="Wpisz ulicę aby zawężyć wyszukiwanie w mieście Toruń" class="filter-input" />
+        <input type="text" v-model="target" v-on:keyup.enter="changeTarget()" placeholder="Wyszukaj ulicę lub obiekt" class="filter-input" />
       </form>
-  
-      <div class="filter-view">
+    </div>
+    <div class="filter-button" v-on:click="sidebar = !sidebar">Filtry</div>
+    <transition name="fade">
+      <div class="filter-view" v-if="sidebar">
         <pictogram-filter :update="updateFilters"></pictogram-filter>
         <minor-filters :update="updateFilters"></minor-filters>
       </div>
-    </div>
+    </transition>
     <div id="map"></div>
   </div>
 </template>
@@ -39,7 +41,8 @@ export default {
     return {
       target: 'Toruń',
       pictograms: pictograms,
-      markers: markers
+      markers: markers,
+      sidebar: false
     }
   },
   mounted: function () {
@@ -162,6 +165,28 @@ export default {
 }
 </script>
 <style lang="scss">
+.tooltip-list {
+  text-align: left;
+  width: 55%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.tooltip-list-contact {
+  list-style: none;
+  width: 45%;
+  line-height: 1.5;
+}
+
+.button {
+  display: inline-block;
+  padding: 5px;
+  background: #efefef;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  text-align: right;
+}
+
 .background {
   background-color: pink;
   height: calc(100% - 100px);
@@ -189,36 +214,46 @@ export default {
   border-radius: 5px;
   background-color: #efefef;
   border: none;
-  padding: 0.8em;
+  padding: 0.6em;
   outline: none;
+  font-size: 1.5em;
+  transition: all 0.3s ease;
+}
+
+.filter-input:focus {
+  background-color: #fff;
+}
+
+.filter-button {
+  position: fixed;
+  z-index: 2;
+  margin-left: 0.8em;
+  margin-top: 3.5em;
+  width: 107px;
+  height: 30px;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.filter-button:hover,
+.filter-button:focus {
+  background-color: #eee;
+  color: #333;
+  box-shadow: 0 0 2px #888;
 }
 
 .filter-view {
-  height: 100%;
-  width: auto;
-  display: block;
-  background: #fff;
-}
-
-.tooltip-list {
-  text-align: left;
-  width: 55%;
-  display: inline-block;
-  vertical-align: top;
-}
-
-.tooltip-list-contact {
-  list-style: none;
-  width: 45%;
-  line-height: 1.5;
-}
-
-.button {
-  display: inline-block;
-  padding: 5px;
-  background: #efefef;
-  border: 1px solid #eee;
+  background-color: #fff;
   border-radius: 5px;
-  text-align: right;
+  position: fixed;
+  z-index: 1;
+  max-width: 373px;
+  margin-top: 6em;
+  margin-left: 0.8em;
+  height: 61%;
+  padding: 1em;
 }
 </style>

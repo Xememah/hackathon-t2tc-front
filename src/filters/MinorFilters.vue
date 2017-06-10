@@ -1,10 +1,14 @@
 <template>
-    <ul>
-        <li v-for="obj in filters">
-            <label :for="obj.name">{{ obj.fullName }}</label>
-            <input type="number" :name="obj.name" :id="obj.name" v-model="obj.value" v-on:change="updateParent">
-        </li>
-    </ul>
+    <div>
+    <hr/>
+    <table style="width: 100%;">
+        <tr v-for="obj in filters">
+            <td style="text-align: left;"><label :for="obj.name">{{ obj.fullName }}</label></td>
+            <td><input type="range" :max="obj.max" :min="obj.min" :name="obj.name" :id="obj.name" v-model="obj.value" v-on:change="updateParent"></td>
+            <td style="padding-left: 5px; width: 80px;">{{ obj.value }} {{ obj.unit }}</td>
+        </tr>
+    </table>
+    </div>
 </template>
 
 <script>
@@ -15,6 +19,9 @@ export default {
                 {
                     fullName: "Szerokość wózka",
                     name: "width",
+                    max: 150,
+                    min: 40,
+                    unit: 'cm',
                     value: 0,
                     check: function (place) {
                         if (place.main_entrance && place.main_entrance.width && Number(this.value) !== 0) {
@@ -24,9 +31,12 @@ export default {
                     }
                 },
                 {
-                    fullName: "Odległość od przystanku",
+                    fullName: "Maks. odległość od przystanku",
                     name: "width",
                     value: 0,
+                    max: 1000,
+                    min: 0,
+                    unit: 'm',
                     check: function (place) {
                         if (this.value == 0) {
                             return true;
@@ -66,3 +76,8 @@ export default {
     }
 }
 </script>
+<style>
+    label {
+        font-weight: 300;
+    }
+</style>
