@@ -1,4 +1,4 @@
-# JakNiepełnosprawny 
+# JakPełnosprawny 
 
 > A Vue.js project
 
