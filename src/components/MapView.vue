@@ -59,9 +59,9 @@ export default {
             break;
           }
         }
-        if (visible) {
+        if (visible && !marker.marker.map) {
           marker.marker.setMap(this.map);
-        } else {
+        } else if(!visible) {
           marker.marker.setMap(null);
         }
       }
