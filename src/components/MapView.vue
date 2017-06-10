@@ -82,7 +82,8 @@ export default {
           map: this.map,
           clickable: true,
           title: data.name,
-          data: data
+          data: data,
+          icon: '/static/marker.png'
         });
         this.markers[i].marker = marker;
 
