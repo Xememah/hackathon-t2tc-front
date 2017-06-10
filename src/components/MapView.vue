@@ -27,19 +27,20 @@ export default {
     minorFilters: MinorFilters
   },
   data() {
-    var API_PATH = 'https://t2tc.maciekmm.net/';
+    let city = this.$router.currentRoute.params.city.toLocaleLowerCase();
+    var API_PATH = 'https://t2tc.maciekmm.net/?city='+city;
 
     var request = new XMLHttpRequest();
     request.open("GET", API_PATH, false);
     request.send(null)
     var markers = JSON.parse(request.responseText);
     // pictograms
-    request.open("GET", API_PATH + 'pictograms', false);
+    request.open("GET", 'https://t2tc.maciekmm.net/pictograms', false);
     request.send(null);
     var pictograms = JSON.parse(request.responseText);
-    console.log(pictograms)
     return {
-      target: 'Toruń',
+      city: city,
+      target: city,
       pictograms: pictograms,
       markers: markers,
       sidebar: true
@@ -48,6 +49,7 @@ export default {
   mounted: function () {
     this.initMap();
     this.populateMarkers();
+    console.log(this.$router);
   },
   methods: {
     updateFilters: function (filter) {
@@ -68,10 +70,10 @@ export default {
     },
     initMap: function () {
       this.map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 53.0200, lng: 18.6090 },
         scrollwheel: false,
         zoom: 13
       })
+      this.changeTarget();  
     },
     populateMarkers: function () {
       var tooltip;
@@ -151,7 +153,7 @@ export default {
       }
     },
     changeTarget: function () {
-      var t = 'Toruń, ' + this.target + ', Polska';
+      var t = this.city+', ' + this.target + ', Polska';
       var geocoder = new google.maps.Geocoder();
       var b = this.map;
       geocoder.geocode({ 'address': t }, function (results, status) {

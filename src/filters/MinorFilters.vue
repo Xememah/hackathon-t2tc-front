@@ -50,7 +50,6 @@ export default {
                                 minDistance = access.distance;
                             }
                         }
-                        console.log(minDistance)
                         if (minDistance > Number(this.value) && minDistance != Number.MAX_SAFE_INTEGER) {
                             return false
                         }

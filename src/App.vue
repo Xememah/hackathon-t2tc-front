@@ -26,7 +26,7 @@ export default {
   name: 'app', 
   data() {
     return {
-      title: "Nazwa aplikacji"
+      title: "JakNiepełnosprawny"
     }
   }
 }
