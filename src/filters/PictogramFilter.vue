@@ -40,11 +40,11 @@ export default {
 }
 </script>
 <style>
-ul {
+.filter-view ul {
     list-style: none;
 }
 
-li {
+.filter-view li {
     display: inline-block;
     margin: 3px;
     font-size: 8pt;

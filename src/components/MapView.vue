@@ -71,7 +71,7 @@ export default {
       })
     },
     populateMarkers: function () {
-      var infowindow;
+      var tooltip;
       var pict = this.pictograms;
       for (var i = 0; i < this.markers.length; i++) {
         var data = this.markers[i];
@@ -86,26 +86,63 @@ export default {
         });
         this.markers[i].marker = marker;
 
-        var b = this.map
+        var map = this.map
         google.maps.event.addListener(marker, 'click', function () {
-          var info = this
-          b.panTo(this.position);
-          if (infowindow)
-            infowindow.close();
-
-          var contentString = "<strong>" + info.title + "</strong><br/><table><tr><td class=''>Wejście do budynku</td><td class=''>Transport</td></tr>";
-          console.log(info.data)
-          contentString = "</table>";
-          for (var i = 0; i < Object.keys(info.data.pictograms).length; i++) { // never do dis
-            //if(pict[i] != undefined)
-            console.log(info.data.pictograms[i])
-            contentString += "<i>" + pict[info.data.pictograms[i]] + "</i><br/>";
+          map.panTo(this.position);
+          if (tooltip) {
+            tooltip.close();
+          }
+          let content = '<h2>' + this.data.name + '</h2><div class="tooltip-wrapper"><ul class="tooltip-list">';
+          for (let pictogram of this.data.pictograms) {
+            content += '<li>' + pict[pictogram] + '</li>'
+          }
+          content += '</ul><ul class="tooltip-list tooltip-list-contact"><li><strong>' + this.data.basics.street + '</strong></li>';
+          if (this.data.basics.phones && this.data.basics.phones[0]) {
+            content += '<li><a href="tel:' + this.data.basics.phones[0] + '">' + this.data.basics.phones[0] + '</a></li>'
+          }
+          if (this.data.basics.website) {
+            content += '<li><a href="' + this.data.basics.website + '">' + this.data.basics.website + '</a></li>'
+          }
+          if (this.data.basics.email) {
+            content += '<li><a href="mailto:' + this.data.basics.email + '">' + this.data.basics.email + '</a></li>'
+          }
+          if (this.data.basics.opening_hours) {
+            content += '<li>' + this.data.basics.opening_hours + '</li>'
+          }
+          content += '</ul><p>Dodatkowe informacje: '
+          if (this.data.main_entrance) {
+            if (this.data.main_entrance.bell) {
+              content += 'dzwonek, '
+            }
+            if (this.data.main_entrance.handrail) {
+              content += 'poręcz, '
+            }
+            if (this.data.main_entrance.width) {
+              content += 'szerokość drzwi: ' + this.data.main_entrance.width + 'cm, '
+            }
+          }
+          if (this.data.access && this.data.access[0]) {
+            let min = this.data.access[0].distance
+            for (let access of this.data.access) {
+              if (access.distance < min) {
+                min = access.distance
+              }
+            }
+            if (min) {
+              content += min + 'm od najbliższego przystanku, ';
+            }
           }
 
-          infowindow = new google.maps.InfoWindow({
-            content: contentString
+          //remove , 
+          if (content.endsWith(", ")) {
+            content = content.substr(0, content.length - 2);
+          }
+
+          content += '</p><a target="_blank" href="http://www.niepelnosprawnik.pl/' + this.data.id + '" class="button">Zapoznaj się z audytem</a></div>';
+          tooltip = new google.maps.InfoWindow({
+            content: content
           });
-          infowindow.open(b, this);
+          tooltip.open(map, this);
         })
       }
     },
@@ -123,7 +160,7 @@ export default {
   },
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .background {
   background-color: pink;
   height: calc(100% - 100px);
@@ -160,5 +197,27 @@ export default {
   width: auto;
   display: block;
   background: #fff;
+}
+
+.tooltip-list {
+  text-align: left;
+  width: 55%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.tooltip-list-contact {
+  list-style: none;
+  width: 45%;
+  line-height: 1.5;
+}
+
+.button {
+  display: inline-block;
+  padding: 5px;
+  background: #efefef;
+  border: 1px solid #eee;
+  border-radius: 5px;
+  text-align: right;
 }
 </style>
