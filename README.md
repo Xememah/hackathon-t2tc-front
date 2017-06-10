@@ -1,4 +1,4 @@
-# hackathon
+# JakNiepełnosprawny 
 
 > A Vue.js project
 

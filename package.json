@@ -1,7 +1,7 @@
 {
-  "name": "hackathon",
+  "name": "jak-niepelnosprawny",
   "version": "1.0.0",
-  "description": "A Vue.js project",
+  "description": "Aplikacja, która pomaga znaleźć miejsca przystosowane dla osób niepełnosprawnych.",
   "author": "Marek Kochanowski <marek@kochanow.ski>",
   "private": true,
   "scripts": {
