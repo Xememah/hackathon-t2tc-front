@@ -20,6 +20,7 @@
 
 import PictogramFilter from '../filters/PictogramFilter.vue'
 import MinorFilters from '../filters/MinorFilters.vue'
+import createTooltip from '../tooltip.js'
 
 export default {
   components: {
@@ -60,6 +61,7 @@ export default {
             break;
           }
         }
+        //antiflicker
         if (visible && !marker.marker.map) {
           marker.marker.setMap(this.map);
         } else if (!visible) {
@@ -77,11 +79,12 @@ export default {
     populateMarkers: function () {
       var tooltip;
       var pict = this.pictograms;
-      for (var i = 0; i < this.markers.length; i++) {
-        var data = this.markers[i];
-        var latLng = new google.maps.LatLng(data.latitude, data.longitude);
+      var map = this.map
+      for (let i in this.markers) {
+        let data = this.markers[i];
+        let latLng = new google.maps.LatLng(data.latitude, data.longitude);
 
-        var marker = new google.maps.Marker({
+        let marker = new google.maps.Marker({
           position: latLng,
           map: this.map,
           clickable: true,
@@ -91,66 +94,21 @@ export default {
         });
         this.markers[i].marker = marker;
 
-        var map = this.map
         google.maps.event.addListener(marker, 'click', function () {
+          // smoothly transition to coordinates
           map.panTo(this.position);
+          // if a tooltip is present, dispose it
           if (tooltip) {
             tooltip.close();
           }
-          let content = '<h2>' + this.data.name + '</h2><div class="tooltip-wrapper"><ul class="tooltip-list">';
-          for (let pictogram of this.data.pictograms) {
-            content += '<li>' + pict[pictogram] + '</li>'
-          }
-          content += '</ul><ul class="tooltip-list tooltip-list-contact"><li><strong>' + this.data.basics.street + '</strong></li>';
-          if (this.data.basics.phones && this.data.basics.phones[0]) {
-            content += '<li><a href="tel:' + this.data.basics.phones[0] + '">' + this.data.basics.phones[0] + '</a></li>'
-          }
-          if (this.data.basics.website) {
-            content += '<li><a href="' + this.data.basics.website + '">' + this.data.basics.website + '</a></li>'
-          }
-          if (this.data.basics.email) {
-            content += '<li><a href="mailto:' + this.data.basics.email + '">' + this.data.basics.email + '</a></li>'
-          }
-          if (this.data.basics.opening_hours) {
-            content += '<li>' + this.data.basics.opening_hours + '</li>'
-          }
-          content += '</ul><p>Dodatkowe informacje: '
-          if (this.data.main_entrance) {
-            if (this.data.main_entrance.bell) {
-              content += 'dzwonek, '
-            }
-            if (this.data.main_entrance.handrail) {
-              content += 'poręcz, '
-            }
-            if (this.data.main_entrance.width) {
-              content += 'szerokość drzwi: ' + this.data.main_entrance.width + 'cm, '
-            }
-          }
-          if (this.data.access && this.data.access[0]) {
-            let min = this.data.access[0].distance
-            for (let access of this.data.access) {
-              if (access.distance < min) {
-                min = access.distance
-              }
-            }
-            if (min) {
-              content += min + 'm od najbliższego przystanku, ';
-            }
-          }
-
-          //remove , 
-          if (content.endsWith(", ")) {
-            content = content.substr(0, content.length - 2);
-          }
-
-          content += '</p><a target="_blank" href="http://www.niepelnosprawnik.pl/' + this.data.id + '" class="button">Zapoznaj się z audytem</a></div>';
           tooltip = new google.maps.InfoWindow({
-            content: content
+            content: createTooltip(this.data, pict)
           });
           tooltip.open(map, this);
         })
       }
     },
+    //focus map on the search target
     changeTarget: function () {
       var t = this.city + ', ' + this.target + ', Polska';
       var geocoder = new google.maps.Geocoder();
@@ -162,16 +120,17 @@ export default {
           if (this.marker) {
             this.marker.setMap(null);
           }
+          // this.marker is never null on the first run
           if (this.marker === null) {
             var marker = new google.maps.Marker({
               position: results[0].geometry.location,
               title: "Tu jesteś!"
             });
             this.marker = marker;
+            marker.setMap(this.map);
           }
           this.marker = null
 
-          marker.setMap(this.map);
         }
       })
     }
