@@ -1,6 +1,8 @@
 # JakPełnosprawny 
 
-> A Vue.js project
+Working demo: [Demo](https://jakpelnosprawny.mionskowski.pl)
+
+Back-end repo: [GitHub](https://github.com/maciekmm/t2tc-backend)
 
 ## Build Setup
 
