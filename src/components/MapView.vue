@@ -28,7 +28,7 @@ export default {
   },
   data() {
     let city = this.$router.currentRoute.params.city.toLocaleLowerCase();
-    var API_PATH = 'https://t2tc.maciekmm.net/?city='+city;
+    var API_PATH = 'https://t2tc.maciekmm.net/?city=' + city;
 
     var request = new XMLHttpRequest();
     request.open("GET", API_PATH, false);
@@ -49,7 +49,6 @@ export default {
   mounted: function () {
     this.initMap();
     this.populateMarkers();
-    console.log(this.$router);
   },
   methods: {
     updateFilters: function (filter) {
@@ -63,7 +62,7 @@ export default {
         }
         if (visible && !marker.marker.map) {
           marker.marker.setMap(this.map);
-        } else if(!visible) {
+        } else if (!visible) {
           marker.marker.setMap(null);
         }
       }
@@ -73,7 +72,7 @@ export default {
         scrollwheel: false,
         zoom: 13
       })
-      this.changeTarget();  
+      this.changeTarget();
     },
     populateMarkers: function () {
       var tooltip;
@@ -153,13 +152,26 @@ export default {
       }
     },
     changeTarget: function () {
-      var t = this.city+', ' + this.target + ', Polska';
+      var t = this.city + ', ' + this.target + ', Polska';
       var geocoder = new google.maps.Geocoder();
       var b = this.map;
-      geocoder.geocode({ 'address': t }, function (results, status) {
+      geocoder.geocode({ 'address': t }, (results, status) => {
         if (status === 'OK') {
           b.panTo(results[0].geometry.location);
-          b.setZoom(15)
+          b.setZoom(15);
+          if (this.marker) {
+            this.marker.setMap(null);
+          }
+          if (this.marker === null) {
+            var marker = new google.maps.Marker({
+              position: results[0].geometry.location,
+              title: "Tu jesteś!"
+            });
+            this.marker = marker;
+          }
+          this.marker = null
+
+          marker.setMap(this.map);
         }
       })
     }

@@ -15,7 +15,7 @@
 export default {
   data() {
     return {
-      city: "Toruń",
+      city: "Wrocław",
       cities: ["Toruń", "Wrocław"]
     }
   },
